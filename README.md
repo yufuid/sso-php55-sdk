@@ -20,25 +20,6 @@ PHP 5.5
 使用SDK
 -------
 
-**身份提供者（IDP)**
-
-1. 实例化SDK的身份提供商::
-
-    $YufuSDK = new YufuSDK(
-      "Your tenant name",                             // 在玉符注册的租户名称。
-      "idp-xxxxxxxxxxx",                              // 从玉符注册并获取相应的身份提供者ID
-      "../test/priv.pem"                              // 租户在服务器上生成私钥文件（.pem格式），需安全保管。
-    );
-
-#. 根据用户选取或提前定义的服务应用ID，可以为用户生成并签署对应令牌\ ``generateIDPUrl``\ ，并向用户发送302跳转登录到第三方服务提供商，代码样式::
-
-    $payload = array(
-        'sub' => "username123123",                     // 用户名称或ID
-        'spid' => "sp-123"                             // 用户选取或提前定义的服务应用ID
-    );
-    $url = $YufuSDK->generateIDPUrl(payload);
-    // redirectURL(url);                               // 跳转用户至玉符云服务器认证授权，可根据需求在URL中添加定制的请求参数(如内网ip)便于后期审计
-
 **服务提供者（SP)**
 
 1. 实例化SDK的服务提供商::
