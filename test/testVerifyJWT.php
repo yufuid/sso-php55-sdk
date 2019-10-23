@@ -5,16 +5,17 @@
  * Date: 2018/7/16
  * Time: 下午4:01
  */
-  echo "Testing Verifying\n";
-  require_once '../src/YufuSDK.php';
-  $YufuSDK = new YufuSDK(
-      "yufu",
-      null,
-      null,
-      "../test/public.pem"
-  );
-  // 长期token，可用来测试verify
-  // eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImM3ODk5Y2M2ODE3NThlYjdkNmUyNDU4NDJkMWY5MjQxMTNmYTQyN2IifQ.eyJzdWIiOiJWRUdBIiwiYXVkIjoiY2lkcCIsInRudCI6Inl1ZnUiLCJpYXQiOjE1MzE4MTg3NTgsImV4cCI6MzE1MzE4MTg3NTgsImlzcyI6ImlkcC0wN2I0MDU4OS1hNTg1LTQwZWEtOWU4Ni05NzlmM2M2NTJiNTYifQ.lutn8IWFeWWITf_q_xTullkJLatSOJho0qLUARlOzoTOnTyECB-idoZvquZ6H8LSsme8mvA9NWAWS-XNS1i6V_ns0R0zlHf89DUyan6D7yAlP0_7M70j3GgQfX92ovELMLl2VYed19Nq2OxykIM5Of8iDB5xwyv43Lyl-Y9GSTY1IXNfgnIFPNUIOpO1Qz8XEj7uxhtcppX2r0WKoyPSZ6Vy5k-IYwKf7_zBTsChEpSr-IroueKF1xcsWgWsu-3913FLhMU0FMdMdseG-pFsnAb2gRR9Pbk-Y2eXsV_Sj4UV1-tzget_2wDA9hGCiLV3WfNCemo4tRIgn5vXN0IsGw
-  $JWT = $YufuSDK->verify("eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImM3ODk5Y2M2ODE3NThlYjdkNmUyNDU4NDJkMWY5MjQxMTNmYTQyN2IifQ.eyJzdWIiOiJWRUdBIiwiYXVkIjoiY2lkcCIsInRudCI6Inl1ZnUiLCJpYXQiOjE1MzE4MTg3NTgsImV4cCI6MzE1MzE4MTg3NTgsImlzcyI6ImlkcC0wN2I0MDU4OS1hNTg1LTQwZWEtOWU4Ni05NzlmM2M2NTJiNTYifQ.lutn8IWFeWWITf_q_xTullkJLatSOJho0qLUARlOzoTOnTyECB-idoZvquZ6H8LSsme8mvA9NWAWS-XNS1i6V_ns0R0zlHf89DUyan6D7yAlP0_7M70j3GgQfX92ovELMLl2VYed19Nq2OxykIM5Of8iDB5xwyv43Lyl-Y9GSTY1IXNfgnIFPNUIOpO1Qz8XEj7uxhtcppX2r0WKoyPSZ6Vy5k-IYwKf7_zBTsChEpSr-IroueKF1xcsWgWsu-3913FLhMU0FMdMdseG-pFsnAb2gRR9Pbk-Y2eXsV_Sj4UV1-tzget_2wDA9hGCiLV3WfNCemo4tRIgn5vXN0IsGw");
-print_r($JWT->sub);
+echo "Testing Verifying\n";
+require_once '../src/YufuSDK.php';
+$YufuSDK = new YufuSDK(
+    "tn-yufu",
+    "yufuid.com/ai-test",
+    null,
+    "../test/public_key.pem"
+);
+$JWT = $YufuSDK->verify("eyJraWQiOiJhaS10ZXN0OnNzbyIsImFsZyI6IlJTMjU2In0.eyJhcHBJbnN0YW5jZUlkIjoiYWktdGVzdCIsImF1ZCI6ImFpLXRlc3QiLCJzdWIiOiJ5dW56aGFuZyIsInByb3RvY29sIjoiIiwidG50X2lkIjoidG4teXVmdSIsInNjb3BlIjoic3NvIiwiaXNzIjoieXVmdWlkLmNvbS9haS10ZXN0IiwibmFtZSI6Inl1bnpoYW5nIiwiZXhwIjoyNTcxODMwMjE1LCJpYXQiOjE1NzE4Mjk2MTV9.a3xd0z5m-DT2WY1OLR9GJiMuLEU6ihmJlcBIoITjPJDHMAqTmj7nQ0DW9YXFV8NLQLnvpec1LZHNtJjO7VHFJnv3_B6XB6U5qCarak-SbfszJ-YWsznp4zD0RwJq-3dNJQrmAEeT700aZ3-7SB5uPkp_mD-soJbNH0BPeN0uSEPJc0o3oCrNoLfni-E_dxVnFsme5C8hZ9qfrF8rovP1DhoU-FpgQS7BbvtO28xdBOBaT21rvCDrCJMqU2uUW4fmhV_Vev-lpz-UlfpYKyOLTMCgB2Gv2JnLnT832rz71DaFIXcR0IYnszeuJVMkulPYGrloe894fls0o5qblapsBg");
+assert( $JWT->sub == 'yunzhang');
+assert($JWT->iss == 'yufuid.com/ai-test');
+assert($JWT->tnt_id == 'tn-yufu');
+echo "\n";
 

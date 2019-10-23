@@ -8,8 +8,7 @@ use Yufu\SDK\InitException as InitException;
 final class YufuSDK
 {
 
-    const SDK_VERSION = '1.0.2';
-    const CIDP_RUNTIME_URL = 'https://idp.yufuid.com/sso/v1/consume';
+    const CIDP_TOKEN_CONSUME_URL = 'https://portal.yufuid.com/api/v1/external/sso';
     const DURATION_IN_MS = 300000; // 5 mins
 
     private $utils;
@@ -27,20 +26,20 @@ final class YufuSDK
      * @param null $keyServiceUrl
      * @param bool $canAccessPortal
      */
-    public function __construct($tenant, $issuer = null, $privateKeyPath = null, $publicKeyPath = null, $keyServiceUrl = null ,$canAccessPortal = false)
+    public function __construct($tenant, $issuer = null, $privateKeyPath = null, $publicKeyPath = null, $canAccessPortal = false)
     {
         require_once 'exceptions/InitException.php';
         if (is_null($tenant)) {
             throw new InitException('Tenant can not be empty');
         }
         $this->tenant = $tenant;
-        $this->defaultLoggingParams = 'tnt=' . $tenant . '&version=' . self::SDK_VERSION . '&issuer=' . $issuer;
+        $this->defaultLoggingParams = 'tnt=' . $tenant . '&issuer=' . $issuer;
         $this->issuer = $issuer;
         require_once 'YufuSDKUtils.php';
         if (!is_null($privateKeyPath)) {
             $privateKey = file_get_contents($privateKeyPath);
         }
-        $this->utils = new YufuSDKUtils($privateKey, $publicKeyPath, $issuer, $defaultLoggingParams, $keyServiceUrl);
+        $this->utils = new YufuSDKUtils($privateKey, $publicKeyPath, $issuer);
         $this->canAccessPortal = $canAccessPortal;
     }
 
@@ -66,6 +65,6 @@ final class YufuSDK
         if ($this->canAccessPortal) {
             $params += '&request_type=access_token';
         }
-        return self::CIDP_RUNTIME_URL . $params . '&' . $this->defaultLoggingParams;
+        return self::CIDP_TOKEN_CONSUME_URL . $params . '&' . $this->defaultLoggingParams;
     }
 }

@@ -1,29 +1,22 @@
 <?php
 
+use Yufu\SDK\CannotRetrieveKeyException as CannotRetrieveKeyException;
 use Yufu\SDK\InvalidFormatException as InvalidFormatException;
 use Yufu\SDK\JWT as JWT;
 
 final class YufuSDKUtils
 {
-
-    const YUFU_KEYSERVICE = 'https://idp.yufuid.com/api/v1/public/keys/';
-
     private $kid;
     private $publicKeyPath;
     private $privateKey;
     private $publicKey;
     private $issuer;
-    private $defaultLoggingParams;
-    private $keyServiceUrl;
 
-
-    public function __construct($privateKey, $publicKeyPath, $issuer, $defaultLoggingParams, $keyServiceUrl)
+    public function __construct($privateKey, $publicKeyPath, $issuer)
     {
         $this->privateKey = $privateKey;
         $this->publicKeyPath = $publicKeyPath;
         $this->issuer = $issuer;
-        $this->defaultLoggingParams = $defaultLoggingParams;
-        $this->keyServiceUrl = $keyServiceUrl;
         require_once 'JWT.php';
         require_once 'exceptions/ExpiredException.php';
         require_once 'exceptions/TokenTooEarlyException.php';
@@ -60,17 +53,12 @@ final class YufuSDKUtils
 
         if ($kid !== $this->kid) {
             // Refetch key
-            if (null != $this->publicKeyPath) {
-                $key = file_get_contents($this->publicKeyPath);
-                if($kid == self::getKeyId($key)){
-                    return $key;
-                }
-            } else {
-                if (null == $this->keyServiceUrl) {
-                    $key = file_get_contents(self::YUFU_KEYSERVICE . $kid . '?' . $this->defaultLoggingParams);
-                } else {
-                    $key = file_get_contents($this->keyServiceUrl . $kid . '?' . $this->defaultLoggingParams);
-                }
+            if (null == $this->publicKeyPath) {
+                throw new CannotRetrieveKeyException('No publicKeyPath found');
+            }
+            $key = file_get_contents($this->publicKeyPath);
+            if ($kid == self::getKeyId($key)) {
+                return $key;
             }
             if (null != $key) {
                 $this->publicKey = self::normalizePublicKey($key);
