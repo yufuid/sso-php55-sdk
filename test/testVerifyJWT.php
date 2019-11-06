@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: fish
- * Date: 2018/7/16
- * Time: 下午4:01
- */
 echo "Testing Verifying\n";
 require_once '../src/YufuSDK.php';
 $YufuSDK = new YufuSDK(
